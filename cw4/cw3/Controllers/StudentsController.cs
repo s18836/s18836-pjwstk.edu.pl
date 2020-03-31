@@ -25,8 +25,8 @@ namespace cw3.Controllers
 
 
 
-        [HttpGet]
-        public IActionResult GetStudents(string orderBy)
+        [HttpGet("{id}")]
+        public IActionResult GetStudents(string id)
         {
             ListaStudentow l1 = new ListaStudentow();
 
@@ -42,12 +42,19 @@ namespace cw3.Controllers
 
                 while (dr.Read())
                 {
-                    var st = new Student();
-                    st.FirstName = (dr["FirstName"].ToString());
-                    st.LastName = (dr["LastName"].ToString());
-                    st.IndexNumber = (dr["IndexNumber"].ToString());
-                    l1.dodaj(st);
+                    if (dr["IndexNumber"].ToString().Equals(id))
+                    {
+                        var st = new Student();
+
+                        st.FirstName = (dr["FirstName"].ToString());
+                        st.LastName = (dr["LastName"].ToString());
+                        st.IndexNumber = (dr["IndexNumber"].ToString());
+                        st.BirthDate = (dr["BirthDate"].ToString());
+                        st.IdEnrollment = (dr["IdEnrollment"].ToString());
+                        l1.dodaj(st);
+                    }
                 }
+                
             }
             
 
