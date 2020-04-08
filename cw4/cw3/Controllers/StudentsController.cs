@@ -25,31 +25,33 @@ namespace cw3.Controllers
 
 
 
-        [HttpGet("{id}")]
-        public IActionResult GetStudents(string id)
+        [HttpGet("{IndexNumber}")]
+        public IActionResult GetStudents(string indexNumber)
         {
             ListaStudentow l1 = new ListaStudentow();
-
+           
             using (var client = new SqlConnection("Data Source=db-mssql;Initial Catalog=s18836;Integrated Security=True"))
             using (var com = new SqlCommand())
             {
-                Console.WriteLine("OTWIERAM");
+               
                 com.Connection = client;
-                com.CommandText = "USE [2019SBD];SELECT * FROM STUDENT";
+                com.CommandText = "USE [2019SBD]; SELECT * FROM STUDENT where STUDENT.IndexNumber = @index";
 
+                com.Parameters.AddWithValue("index", indexNumber);
                 client.Open();
+                
                 var dr = com.ExecuteReader();
 
                 while (dr.Read())
                 {
-                    if (dr["IndexNumber"].ToString().Equals(id))
+                  
                     {
                         var st = new Student();
 
                         st.FirstName = (dr["FirstName"].ToString());
                         st.LastName = (dr["LastName"].ToString());
                         st.IndexNumber = (dr["IndexNumber"].ToString());
-                        st.BirthDate = (dr["BirthDate"].ToString());
+                        st.BirthDate = ((DateTime)dr["BirthDate"]);
                         st.IdEnrollment = (dr["IdEnrollment"].ToString());
                         l1.dodaj(st);
                     }
